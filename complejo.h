@@ -16,17 +16,21 @@ public:
 	Complejo const &operator-=(Complejo const &);
 	~Complejo();
 
-	double re() const;
-	double im() const;
+	void setRe(double x){re_ = x;};
+	void setIm(double y){im_ = y;};
+	double getRe() const;
+	double getIm() const;
 	double abs() const;
 	double abs2() const;
 	Complejo const &conjugar();
 	Complejo const conjugado() const;
 	bool zero() const;
+	void emitir() const{std::cout << "(" << re_ << "," << im_ << ")";};
 
 	friend Complejo const operator+(Complejo const &, Complejo const &);
 	friend Complejo const operator-(Complejo const &, Complejo const &);
 	friend Complejo const operator*(Complejo const &, Complejo const &);
+	friend Complejo const operator*(Complejo const &, double);
 	friend Complejo const operator/(Complejo const &, Complejo const &);
 	friend Complejo const operator/(Complejo const &, double);
 

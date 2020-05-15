@@ -5,14 +5,14 @@
 #include <time.h>
 #include <stdlib.h>
 //#include "complejo.h"
- 
+#include "pixel.h"
 using namespace std;
  
 template <class T>
 class Matrix {
     public:
         Matrix();
-        Matrix(int, int);
+        Matrix(int i, int j);
         Matrix(const Matrix &m);
         ~Matrix();
  
@@ -22,17 +22,22 @@ class Matrix {
  
         bool isSymmetric();
         bool isIdentity();
- 
+        
+        int get_alto(){return m_rows;};
+        int get_ancho(){return m_cols;};
         T get_max();
         T get_min();
         T get_mode();
+        T get_val_xpos(int, int);
  
         void delete_matrix();
         void fill_by_user();
         void fill_random();
+        void fill_pos(int, int, T);
         void get_transpose();
         void multiply_by_scalar(T);
         void print_matrix();
+        void print_matrix_img();
         void swap_cols(int, int);
         void swap_rows(int, int);
  
@@ -253,7 +258,17 @@ T Matrix<T>::get_mode()
  
     return m_mode;
 }
- 
+
+template<typename T>
+T Matrix<T>::get_val_xpos(int x, int y)
+{
+    for (int i = 0; i < m_rows; ++i)
+        for (int j = 0; j < m_cols; ++j)
+            if((i == x) && (j == y))
+                return m_matrix[i][j];
+    return 0;
+}
+
 template<typename T>
 void Matrix<T>::delete_matrix()
 {
@@ -295,7 +310,11 @@ void Matrix<T>::fill_random()
     //m_min = m_matrix[0][0];
     srand(time(NULL));
 }
- 
+template<typename T>
+void Matrix<T>::fill_pos(int i, int j, T dato)
+{
+	m_matrix[i][j] = dato;
+} 
 // Obtener la transpuesta de una Matriz
 template<typename T>
 void Matrix<T>::get_transpose()
@@ -329,6 +348,25 @@ void Matrix<T>::print_matrix()
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             cout << m_matrix[i][j] << "  ";
+        }
+        cout << endl << endl;
+    }
+    cout << endl << endl;
+}
+template<typename T>
+void Matrix<T>::print_matrix_img()
+{
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            //(m_matrix[i][j]).emitir();
+            (m_matrix[i][j]).getPos().emitir();
+        }
+        cout << endl << endl;
+    }
+    cout << endl << endl;
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            cout << (m_matrix[i][j]).getVal() << " ";
         }
         cout << endl << endl;
     }
@@ -377,4 +415,5 @@ void Matrix<T>::swap_rows(int row_1, int row_2)
  
 template<typename T>
 Matrix<T>::~Matrix() {}
+
 #endif //_MATRIZ_H_INCLUDED_
