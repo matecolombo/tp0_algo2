@@ -1,0 +1,31 @@
+Compilación a secas (UNIX), sin funciones adicionales:
+
+% make tests
+
+Para compilar en Linux, con GCC:
+
+% make CXX=g++ CXXARGS="-g -Wall -O" tests
+
+Para compilar en Linux, con el compilador de Intel:
+
+% make CXX=/opt/icc/bin/icc CXXARGS="-w1 -g" tests
+
+Para compilar en DOS, con DJGPP:
+
+% make tests
+
+Para compilar en Windows, con Digital Mars C++:
+
+C:\tp\> \dm\bin\make CXX=\dm\bin\dmc CXXARGS="-I\dm\stlport\stlport -cpp" tests
+
+Para compilar en Windows, con Borland C++ 5.5.1:
+
+C:\tp\> bcc32 -P -DWIN32 -I. -I\bc\Include -L\bc\Lib -ecmdline.exe cmdline.cc main.cc
+C:\tp\> bcc32 -P -DWIN32 -I. -I\bc\Include -L\bc\Lib -eruntest.exe runtest.cc
+C:\tp\> runtest cmdline.tests
+
+Para compilar en Windows, con Microsoft C++ 13.10.3052:
+
+C:\tp\> cl cmdline.cc main.cc /I. /DWIN32 /EHa /Fecmdline.exe
+C:\tp\> cl runtest.cc /I. /DWIN32 /EHa /Feruntest.exe
+C:\tp\> runtest cmdline.tests

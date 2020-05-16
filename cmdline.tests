@@ -1,0 +1,35 @@
+# Formato: un caso de prueba por línea. A su vez, los datos de las
+# líneas están contenidos en columnas, separadas entre si por uno
+# o más caracteres de espacios (SP),
+#
+# nombre SP status SP input SP reference SP output SP command ...
+#
+# Los comentarios se indican con el caracter numeral (#). Líneas
+# en blanco son ignoradas. Para más información, consultar con la
+# documentación provista en el archivo runtest.cc.
+#
+# $Date: 2012/09/15 12:22:05 $
+
+# Caso 1: opción -f no presente en la línea de comando.
+#
+test_1	~0	test1.in	test1.ref	test1.out	cmdline.exe <test1.in >test1.out 2>test1.err
+
+# Caso 2: opción -f con un argumento no numérico.
+#
+test_2	~0	test2.in	test2.ref	test2.out	cmdline.exe <test2.in -f x >test2.out 2>test2.err
+
+# Caso 3: opción -f con un argumento no numérico.
+#
+test_3	~0	test3.in	test3.ref	test3.out	cmdline.exe <test1.in -f 1x >test3.out 2>test3.err
+
+# Caso 4: opción inexistente.
+#
+test_4	~0	test4.in	test4.ref	test4.out	cmdline.exe <test1.in -F >test4.out 2>test4.err
+
+# Caso 5: archivo con un único elemento.
+#
+test_5	0	test5.in	test5.ref	test5.out	cmdline.exe -f 2 <test5.in >test5.out
+
+# Caso 6: archivo con múltiples elementos.
+#
+test_6	0	test6.in	test6.ref	test6.out	cmdline.exe -f -1 -i test6.in -o test6.out
