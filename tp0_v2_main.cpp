@@ -7,8 +7,8 @@
 #include <cstring>
 
 #include "tp0_v2_main.h"
+#include "tp0_matrix.h"
 #include "/home/alan/Documentos/Algo2/clases/cmdline.h"
-#include "/home/alan/Documentos/Algo2/clases/matrix.h"
 #include "/home/alan/Documentos/Algo2/clases/imagen.h"
 
 #include "/home/alan/Documentos/Algo2/clases/complejo.cpp"
@@ -31,7 +31,7 @@ static option_t options[] = {
 int main(int argc, char * const argv[])
 {
 	string param[4];
-	imagen img;
+	imagen img_o;
 	
 	//----- Procesamiento de la linea de comando.
 	cmdline cmdl(options);	
@@ -39,30 +39,23 @@ int main(int argc, char * const argv[])
 
 	//----- Procesamiento de las primeras lineas con inf	
 	extraer_parametros(ifs, param);
-	img.cargarParametros(param);
+	img_o.cargarParametros(param);
 	//img.imprimirParametros();
 
 	//----- Procesamiento del resto de lineas
-	Matrix<double> m(img.getAlto(), img.getAncho());
+	matriz<double> m(img_o.getAlto(), img_o.getAncho());
 	crear_matriz(ifs, m);
-	//m.print_matrix();
+	//m.print_matriz();
 
 	//----- Creacion de la imagen inicial
-	img.crearMatriz();
-	img.imprimir();
-	img.cargarMatriz(m);
-	img.imprimir();
-
-	// Definir o buscar puntero a funcion para mandarselo a transformar
+	img_o.cargarMatriz(m);
+	img_o.imprimir(*oss);		//Impresion comun
+	img_o.imprimir_pos(*oss);	//impresion de posicion y valor
 
 	//----- Creacion de imagen final
-	imagen imgf = img.transformar(method)
-	imgf.imprimir();
-
-	//----- Escritura de imagen en archivo de salida
-
-
-	//----------------------------------------------
+	//imagen img_f;
+	//img_f.transformar(img_o, method);
+	//img_f.imprimir(*oss);
 
 	ifs.close();
 	ofs.close();
@@ -100,7 +93,7 @@ void extraer_parametros(fstream & fin, string param[])
 	}
 }
 
-void crear_matriz(fstream & fin, Matrix<double> & m)
+void crear_matriz(fstream & fin, matriz<double> & m)
 {	
 	string linea, token, delim = " ";
 	int i = 0, j = 0, pos = 0;
@@ -169,7 +162,7 @@ static void opt_output(string const &arg)
 {
 	// Si el nombre del archivos es "-", se arroja un error por cerr
 	if (arg == "-") {
-		oss = &cerr;
+		oss = &cout;
 		//exit(1);	// Establezco la salida estandar cout como flujo de salida
 	} else {
 		ofs.open(arg.c_str(), ios::out);
@@ -177,7 +170,7 @@ static void opt_output(string const &arg)
 	}
 
 	// Verificamos que el stream este OK.
-	//
+	
 	if (!oss->good()) {
 		cerr << "cannot open " << arg << "." << endl;
 		exit(1);		// EXIT: Terminaci�n del programa en su totalidad

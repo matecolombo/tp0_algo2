@@ -1,102 +1,20 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <math.h>
 #include "imagen.h"
-#include "matrix.h"
+#include "/home/alan/Documentos/Algo2/tp0/tp0_matrix.h"
 #include "pixel.h"
 
-
-/*
-imagen::imagen(string nombre_archivo)
+imagen::imagen(uint ancho, uint alto, uint resolucion)
 {
-	uint pos, i, j, n_linea;
-	string linea, token, delim = " ";
-	pixel<double> pix;
-	double dato;
-	
-	ifstream fin(nombre_archivo);	
-
-	if(!fin.bad())				
-	{
-	while(!fin.eof()){
-		pos = 0;
-		getline(fin, linea);
-		
-		if(linea[0] == '#'){
-			n_linea++;
-			continue;
-		}
-
-		if(n_linea == 1)
-			formato = linea;
-			
-		if(n_linea == 3){
-			pos = linea.find(delim);
-			token = linea.substr(0, pos);	
-			x = stoi (token, 0, 10);		
-			linea.erase(0, pos + delim.length());
-			token = linea.substr(0, pos);
-			y = stoi (token, 0, 10);					
-		}
-		
-		if(n_linea == 4){
-			n = stoi (linea, 0, 10);
-			break;	
-		}
-		n_linea++;	
-	}
-	cout << formato << ", " << x << ", " << y << ", " << n << ", " << n_linea << endl << endl;
-
-	//Procesamiento del resto de lineas
-	Matrix<pixel<double>> m(y, x);
-	i = j = 0;
-	while(!fin.eof() && i < y)
-	{
-		getline(fin, linea);
-		cout << linea << endl;
-		j = pos = 0; 
-		while(j<x)
-		{	
-			pos = linea.find(delim);
-			token = linea.substr(0, pos);
-			if(istringstream(token) >> dato){
-				pix.setPos(i, j);
-				pix.setVal(dato);
-				m.fill_pos(i, j, pix);
-				j++;
-			}
-			linea.erase(0, pos + delim.length());
-		}
-		i++;	
-	}
-	}
-	else
-		cout << "fallo la apertura del archivo";	
-
-	m.print_matrix();
-}
-*/
-void imagen::cargarMatriz(Matrix<double> & mi)
-{	
-	uint i, j;
-	pixel<double> pix;
-	Complejo c;
-	m = new Matrix<pixel<double>>(mi.get_alto(), mi.get_ancho());
-	for (i = 0; i < y; ++i)
-		for (j = 0; j < x; ++j)
-		{		
-			c.setRe(i);
-			c.setIm(j);
-			pix.setPos(c);
-			pix.setVal(mi.get_val_xpos(i, j));
-			m->fill_pos(i, j, pix);
-		}
-}
-void imagen::imprimir()
-{	
-	imprimirParametros();
-	m->print_matrix_img();
+	x = ancho;
+	y = alto;	
+	n = resolucion;
+	setPaso();
+	m = NULL;
 }
 
 void imagen::cargarParametros(string param[])
@@ -105,11 +23,106 @@ void imagen::cargarParametros(string param[])
 	istringstream(param[1]) >> x;
 	istringstream(param[2]) >> y;
 	istringstream(param[3]) >> n;
+	setPaso();
 }
 
-void imagen::imprimirParametros()
+void imagen::cargarMatriz(matriz<double> & mi)
+{	
+	pixel<double> pix;
+	m = new matriz<pixel<double>>(y, x);
+	
+	for (uint i = 0; i < y; ++i){
+		for (uint j = 0; j < x; ++j){
+			pix.setPos(-1 + j*paso_x, 1 - i*paso_y);
+			pix.setVal(mi.get_val_xpos(i, j));			
+			m->fill_pos(i, j, pix);			
+		}
+	}
+}
+/*
+void imagen::transformar(imagen & img_f, Complejo (*f) (const Complejo &))
 {
-	cout << endl << "Formato: " << formato << endl;
-	cout << "Dimension: " << x << "x" << y << endl;
-	cout << "Resolucion: " << n << endl << endl;
+	Complejo z, fz;
+	//pixel<double> pix;
+	matriz<double> m_f(y, x);
+	//img_f.getMatriz() = new matriz<pixel<double>>(y, x);
+	img_f.setFormato(formato);
+	img_f.setAncho(x);
+	img_f.setAlto(y);
+	img_f.setRes(n);
+	
+	for (uint i = 0; i < y; ++i)
+	{
+		for (uint j = 0; j < x; ++j)
+		{
+			z.setRe(-1 + j*paso_x); z.setIm(1 - i*paso_y);
+			//fz = f(z);			
+			
+			m_f.fill_pos(i, j, find_val_pos(z.getRe(), z.getIm()));
+		}		
+	}	
+	//m_f.print_matriz();
+	img_f.cargarMatriz(m_f);
+}
+
+void imagen::transformar(imagen & img_f, Complejo (*f) (const Complejo &))
+{
+	return;
+}*/
+double imagen::find_val_pos(double u, double v)
+{	
+	//uint auxi, auxj;
+	//double aux;
+	//double errx = 10, erry = 10;
+	/*
+	for (uint i = 0; i < y; ++i)
+	{
+		for (uint j = 0; j < x; ++j)
+		{
+			aux = (m->get_val_xpos(i, j)).getX();			
+			if(abs(aux-u) < errx){
+				errx = abs(aux-u);
+				auxi = i;
+			}
+			aux = (m->get_val_xpos(i, j)).getY();			
+			if(abs(aux-v) < erry){
+				erry = abs(aux-v);
+				auxj = j;
+			}			
+		}
+	}	
+	return (m->get_val_xpos(auxi, auxj)).getVal();
+	*/
+	return 0;//(m->get_val_xpos(auxi, auxj)).getVal();
+	
+}
+
+void imagen::imprimir(ostream & ofs)
+{	
+	ofs << endl;
+	ofs << formato << endl;
+	ofs << x << "x" << y << endl;
+	ofs << n << endl;
+
+	for(uint i = 0; i < y; i++){
+		for(uint j = 0; j < x; j++){
+			ofs << (m->get_val_xpos(i,j)).getVal() << " ";
+		}
+		ofs << endl;
+	}
+	ofs << endl;
+}
+void imagen::imprimir_pos(ostream & ofs)
+{	
+	ofs << endl;
+	for(uint i = 0; i < y; i++){
+		for(uint j = 0; j < x; j++)
+			(m->get_val_xpos(i,j)).emitir();
+		ofs << endl;
+	}
+	ofs << endl;
+}
+imagen::~imagen()
+{
+	m->~matriz();
 }
