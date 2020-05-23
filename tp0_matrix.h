@@ -4,8 +4,7 @@
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
-//#include "complejo.h"
-#include "/home/alan/Documentos/Algo2/clases/pixel.h"
+#include "pixel.h"
 using namespace std;
  
 template <class T>
@@ -55,11 +54,13 @@ template<typename T> matriz<T>::matriz(int rows , int cols)
     }
 }
 
+// Llenar posicion especifica
 template<typename T> void matriz<T>::fill_pos(int i, int j, T dato)
 {
     m_matriz[i][j] = dato;
 } 
 
+// Retornar valor de una cierta posicion
 template<typename T> T matriz<T>::get_val_xpos(int x, int y)
 {
     for (int i = 0; i < m_rows; ++i)
@@ -74,9 +75,9 @@ template<typename T> void matriz<T>::print_matriz()
 {
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
-            cout << m_matriz[i][j] << "  ";
+            cout << m_matriz[i][j] << " ";
         }
-        cout << endl << endl;
+        cout << endl;
     }
     cout << endl << endl;
 }

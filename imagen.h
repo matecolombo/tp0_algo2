@@ -5,42 +5,47 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include "/home/alan/Documentos/Algo2/tp0/tp0_matrix.h"
+#include "tp0_matrix.h"
 #include "pixel.h"
 #include "complejo.h"
 
+#define ERROR 0.01
+
 using namespace std;
 typedef unsigned int uint;
+
+Complejo expz(const Complejo &);
 
 class imagen
 {	
 private:
 	string nombre, formato;
-	uint x, y, n;
-	double paso_x, paso_y;
+	uint ancho, alto, resolucion;
+	double paso_ancho, paso_alto;
 	
 	matriz<pixel<double>> * m;
 	
 public:
-	imagen():x(0), y(0), n(0), paso_x(0), paso_y(0), m(0){};
-	imagen(uint x, uint y, uint n);
+	imagen():ancho(0), alto(0), resolucion(0), paso_ancho(0), paso_alto(0), m(0){};
 	~imagen();
 
-	uint getAncho(){return x;};
-	uint getAlto(){return y;};
-	uint getRes(){return n;};
+	string getFormato(){return formato;};
+	uint getAncho(){return ancho;};
+	uint getAlto(){return alto;};
+	uint getRes(){return resolucion;};
 	matriz<pixel<double>>* & getMatriz(){return m;};
 	void setFormato(string u){formato = u;};
-	void setAncho(uint u){x = u;};
-	void setAlto(uint u){y = u;};
-	void setRes(uint u){n = u;};
-	void setPaso(){paso_x = 2 / (double)x; paso_y = 2 / (double)y;};
+	void setAncho(uint u){ancho = u;};
+	void setAlto(uint u){alto = u;};
+	void setRes(uint u){resolucion = u;};
+	void setPaso(){paso_ancho = 2 / (double)ancho; paso_alto = 2 / (double)alto;};
 	void cargarMatriz(matriz<double> & mi);
+	void cargar(istream &);
+	void copiar(imagen &);
 	void imprimir(ostream &);
-	void imprimir_pos(ostream &);
-	void cargarParametros(string*);
-	//void transformar(imagen &, Complejo (*method) (const Complejo &));
-	double find_val_pos(double x, double y);
+	void imprimir_comp(ostream &);
+	void transformar(Complejo (*method) (const Complejo &));
+	double search_val_pos(const Complejo &);
 };
 
 #endif //_IMAGEN_H_INCLUDED_
