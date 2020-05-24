@@ -18,7 +18,7 @@ static fstream ofs;			// Output File Stream (derivada de la clase ofstream que d
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
 	{1, "o", "output", "-", opt_output, OPT_DEFAULT},
-	{1, "m", "method", "-", opt_method, OPT_DEFAULT},
+	{1, "f", "function", "-", opt_function, OPT_DEFAULT},
 	{0, "h", "help", NULL, opt_help, OPT_DEFAULT},
 	{0, },
 	};
@@ -41,7 +41,7 @@ int main(int argc, char * const argv[])
 
 	imagen img_f;
 	img_f.copiar(img_o);
-	img_f.transformar(method);
+	img_f.transformar(function);
 	img_f.imprimir(*oss);
 
 	//----- Fin
@@ -51,19 +51,19 @@ int main(int argc, char * const argv[])
 	return 0;
 }
 
-static void opt_method(string const &arg)
+static void opt_function(string const &arg)
 {
-	if (!strcmp(IDENTITY_METHOD, arg.c_str()))
+	if (!strcmp(IDE_FUNCTION, arg.c_str()))
 	{
-		method = ide;
+		function = ide;
 	}
-	else if (!strcmp(EXP_METHOD, arg.c_str()))
+	else if (!strcmp(EXP_FUNCTION, arg.c_str()))
 	{
-		method = exp;
+		function = exp;
 	}
 	else if (arg.c_str() == NULL)
 	{
-		method = ide;
+		function = ide;
 	}
 	else{
 		exit(1);
@@ -72,23 +72,29 @@ static void opt_method(string const &arg)
 
 static void opt_input(string const &arg)
 {
-	// Si el nombre del archivos es "-" entonces se arroja un error
-	
+	// Si el nombre del archivos es "-", usaremos la entrada
+	// est�ndar. De lo contrario, abrimos un archivo en modo
+	// de lectura.
+	//
 	if (arg == "-") {
-		cerr << "Input file not found" << arg << "." << endl;
-		exit(1);
+		iss = &cin;		// Establezco la entrada estandar cin como flujo de entrada
 	}
 	else {
-		ifs.open(arg.c_str(), ios::in); 	// c_str(): Returns a pointer to an array that contains a null-terminated
-												// sequence of characters (i.e., a C-string) representing
-		iss = &ifs;								// the current value of the string object.
-		
-		//Verificamos que el stream este OK.
-		if (!iss->good()) {
-			cerr << "cannot open " << arg << "." << endl;
-			exit(1);
-		}		
-	}	
+		ifs.open(arg.c_str(), ios::in); // c_str(): Returns a pointer to an array that contains a null-terminated
+										// sequence of characters (i.e., a C-string) representing
+										// the current value of the string object.
+		iss = &ifs;
+	}
+
+	// Verificamos que el stream este OK.
+	//
+	if (!iss->good()) {
+		cerr << "cannot open "
+		     << arg
+		     << "."
+		     << endl;
+		exit(1);
+	}
 }
 
 static void opt_output(string const &arg)
@@ -112,7 +118,7 @@ static void opt_output(string const &arg)
 
 static void opt_help(string const &arg)
 {
-	cout << "cmdline -m method [-i file] [-o file]"
+	cout << "cmdline -f function [-i file] [-o file]"
 	     << endl;
 	exit(0);
 }
