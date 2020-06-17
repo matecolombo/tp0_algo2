@@ -8,7 +8,11 @@
 #define OPT_SEEN      1
 #define OPT_MANDATORY 2
 
-struct option_t {
+#define MSJ_ARGUMENTO_REQUERIDO "Se requiere un argumento para: "
+#define MSJ_OPCION_DESCONOCIDA "Opcion desconocida: "
+#define MSJ_OPCION "Opcion: "
+#define MSJ_OBLIGATORIO "es obligatorio."
+struct opcion_t {
 	int has_arg;
 	const char *short_name;
 	const char *long_name;
@@ -18,25 +22,14 @@ struct option_t {
 };
 
 class cmdline {
-	// Este atributo apunta a la tabla que describe todas
-	// las opciones a procesar. Por el momento, sólo puede
-	// ser modificado mediante contructor, y debe finalizar
-	// con un elemento nulo.
-	//
-	option_t *option_table;
-
-	// El constructor por defecto cmdline::cmdline(), es
-	// privado, para evitar construir "parsers" (analizador 
-	// sintáctico, recibe una palabra y lo interpreta en 
-	// una acción dependiendo su significado para el programa) 
-	// sin opciones. Es decir, objetos de esta clase sin opciones.
-	//
-
+	opcion_t *option_table;
+	
 	cmdline();
+	
 	int do_long_opt(const char *, const char *);
 	int do_short_opt(const char *, const char *);
 public:
-	cmdline(option_t *);
+	cmdline(opcion_t *);
 	void parse(int, char * const []);
 };
 
