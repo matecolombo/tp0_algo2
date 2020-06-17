@@ -33,6 +33,8 @@ private:
 		pixel(double val_):val(val_){};
 		~pixel(){};
 
+		friend ostream & operator<<(ostream & os, const pixel & pix){return os << pix.val << " ";}
+
 		void setX(double x_){x = x_;}
 		void setY(double y_){y = y_;}
 		void setPos(double x_, double y_){x = x_; y = y_;}
@@ -40,8 +42,6 @@ private:
 		double getX(){return x;}
 		double getY(){return y;}
 		double getVal(){return val;}
-		//void operator<<();
-		void emitir(){cout<<setprecision(2)<<"("<<x<<","<<y<<","<<val<<") ";}
 	};
 
 	string formato;
@@ -55,6 +55,8 @@ public:
 	imagen():alto(0), ancho(0), resolucion(0), paso_alto(0), paso_ancho(0), m(0){};
 	imagen(uint x, uint y, uint res){m = new matriz<pixel>(y, x); ancho = x; alto = y; resolucion = res;};
 	~imagen();
+
+	friend ostream & operator<<(ostream &, const imagen &);
 
 	void setFormato(string formato_){formato = formato_;}
 	void setResolucion(uint resolucion_){resolucion = resolucion_;}

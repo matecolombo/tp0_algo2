@@ -115,6 +115,7 @@ void imagen::transformar(string funcion)
 
 	//transformacion del formato de la funcion
 
+	/*
 	//prueva de la pila
 	pila<char> p;
 	p.push('a');
@@ -123,7 +124,7 @@ void imagen::transformar(string funcion)
 	cout << p.pop() << endl;
 	cout << p.pop() << endl;
 	cout << p.pop() << endl;
-	
+	*/
 
 	for (uint i = 0; i < alto; ++i)
 	{
@@ -176,6 +177,23 @@ double imagen::buscarValor(const Complejo & fz)
 	return 0;
 }
 
+friend ostream & imagen::operator<<(ostream & ofs, const imagen & img)
+{
+	ofs << formato << endl;
+	ofs << ancho << " " << alto << endl;
+	ofs << resolucion << endl;
+		
+	if(m != NULL){
+		for(uint i = 0; i < alto; i++){
+			for(uint j = 0; j < ancho; j++){
+				ofs << m->getValPos(i, j);
+			}
+			ofs << endl;
+		}
+	}
+	ofs << endl;
+}
+
 //----- Imprime la imagen en el flujo de salida
 void imagen::imprimir(ostream & ofs)
 {	
@@ -186,7 +204,8 @@ void imagen::imprimir(ostream & ofs)
 	if(m != NULL){
 		for(uint i = 0; i < alto; i++){
 			for(uint j = 0; j < ancho; j++){
-				ofs << (m->getValPos(i,j)).getVal() << " ";
+				//ofs << (m->getValPos(i,j)).getVal() << " ";
+				ofs << m->getValPos(i, j);
 			}
 			ofs << endl;
 		}
@@ -200,7 +219,7 @@ void imagen::imprimirPixel(ostream & ofs)
 	ofs << endl;
 	for(uint i = 0; i < alto; i++){
 		for(uint j = 0; j < ancho; j++)
-			(m->getValPos(i,j)).emitir();
+			//(m->getValPos(i,j)).emitir();
 		ofs << endl;
 	}
 }
@@ -208,5 +227,5 @@ void imagen::imprimirPixel(ostream & ofs)
 //----- Destructor
 imagen::~imagen()
 {	
-	m->borrarMatriz();
+	m->~matriz();
 }

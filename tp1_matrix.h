@@ -28,8 +28,7 @@ class matriz {
         int getAlto(){return alto;}
         int getAncho(){return ancho;}
         T getValPos(uint, uint);
-        void borrarMatriz();
-        void cargarPos(int, int, T);
+       void cargarPos(int, int, T);
         void imprimirMatriz();
 };
 
@@ -77,11 +76,13 @@ template<typename T> void matriz<T>::cargarPos(int i, int j, T dato)
 // Retornar valor de una cierta posicion
 template<typename T> T matriz<T>::getValPos(uint x, uint y)
 {
+    /*
     for (uint i = 0; i < alto; ++i)
         for (uint j = 0; j < ancho; ++j)
             if((i == x) && (j == y))
                 return m[i][j];
-    return m[0][0];
+    */
+    return m[x][y];
 }
 
 // Imprimir matriz
@@ -96,15 +97,6 @@ template<typename T> void matriz<T>::imprimirMatriz()
     cout << endl << endl;
 }
 
-// Borrar matriz
-template<typename T> void matriz<T>::borrarMatriz()
-{
-    for (uint i = 0; i < alto; i++) {
-        delete[] m[i];
-    }
-    delete[] m;
-}
- 
 // Destructor
 template<typename T> matriz<T>::~matriz()
 {
